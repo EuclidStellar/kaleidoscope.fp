@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kaleidoscope_fp/auth/auth.dart';
 import 'package:kaleidoscope_fp/auth/forgot.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required String title});
 
@@ -12,45 +11,39 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   String? emailError;
   String? passwordError;
 
-
   bool isValidEmail(String email) {
-  final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
-  return emailPattern.hasMatch(email);
-}
+    final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
+    return emailPattern.hasMatch(email);
+  }
 
-bool isValidPassword(String password) {
-  final RegExp passwordPattern = RegExp(
-    r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$',
-  );
+  bool isValidPassword(String password) {
+    final RegExp passwordPattern = RegExp(
+      r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$',
+    );
 
-  return passwordPattern.hasMatch(password);
-}
-
-
+    return passwordPattern.hasMatch(password);
+  }
 
   @override
-  void dispose(){
+  void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
-
-void loginUser() async {
-  FirebaseAuthMethods(FirebaseAuth.instance).emailLogin(
-    email: emailController.text,
-    password: passwordController.text,
-    context: context,
-  );
-}
-
+  void loginUser() async {
+    FirebaseAuthMethods(FirebaseAuth.instance).emailLogin(
+      email: emailController.text,
+      password: passwordController.text,
+      context: context,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,30 +58,24 @@ void loginUser() async {
             ),
             Row(
               children: [
-
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-
                   icon: const Padding(
                     padding: EdgeInsets.only(left: 12.0),
                     child: Image(
                       image: AssetImage(
                         'assets/images/back_arrow.png',
                       ),
-
                       width: 30,
                       fit: BoxFit.scaleDown,
-
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   width: 10,
                 ),
-
                 const Padding(
                   padding: EdgeInsets.only(left: 40.0),
                   child: Text(
@@ -102,64 +89,45 @@ void loginUser() async {
                 ),
               ],
             ),
-
-
             const SizedBox(
               height: 20,
             ),
-
-
             SizedBox(
               width: double.infinity,
               child: Image.asset('assets/images/img4.png'),
             ),
-
-
             const SizedBox(
               height: 20,
             ),
-
-
             const SizedBox(
               height: 10,
             ),
-
-             MyTextField(
+            MyTextField(
               hintText: 'Enter your Email',
               inputType: TextInputType.emailAddress,
               labelText2: 'Email',
               secure1: false,
               capital: TextCapitalization.none,
-              nameController1 : emailController,
+              nameController1: emailController,
             ),
-
             const SizedBox(
               height: 10,
             ),
-
             Padding(
-
               padding: const EdgeInsets.symmetric(horizontal: 20),
-
               child: TextFormField(
                 controller: passwordController,
                 obscureText: true,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-
                   suffixIcon: IconButton(
-                    onPressed: () { 
-                    },
-
+                    onPressed: () {},
                     icon: const Icon(
                       Icons.remove_red_eye_rounded,
                       color: Colors.grey,
                     ),
-
                   ),
-
-
                   contentPadding: const EdgeInsets.all(20),
                   hintText: 'Enter your Password',
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -167,31 +135,20 @@ void loginUser() async {
                     borderSide: BorderSide(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
-
-
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
-
-
                   labelText: 'Password',
                   labelStyle: const TextStyle(color: Colors.black54),
-
-
                 ),
               ),
             ),
-
-
             const SizedBox(
               height: 5,
             ),
-
-
             GestureDetector(
               onTap: () {
-
                 /*
 
                 Navigator.push(
@@ -203,7 +160,12 @@ void loginUser() async {
 
                 */
 
-                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ForgotPassword(title: 'Homepage',)));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ForgotPassword(
+                              title: 'Homepage',
+                            )));
               },
               child: const Align(
                 alignment: Alignment.centerLeft,
@@ -220,35 +182,29 @@ void loginUser() async {
                 ),
               ),
             ),
-
-
             const SizedBox(
               height: 30,
             ),
-
-
             GestureDetector(
               onTap: () {
-
-                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ForgotPassword(title: 'Homepage',)));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ForgotPassword(
+                              title: 'Homepage',
+                            )));
               },
-
               child: Padding(
                 padding: const EdgeInsets.only(left: 25, right: 25, bottom: 12),
                 child: Container(
-
                   height: 60,
                   width: double.infinity,
-
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
-
                   ),
                   child: TextButton(
-
                     style: const ButtonStyle(
-
                         elevation: MaterialStatePropertyAll(8),
                         backgroundColor: MaterialStatePropertyAll(
                             Color.fromARGB(255, 214, 213, 213)),
@@ -258,17 +214,13 @@ void loginUser() async {
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(16),
-
-
                             ),
                           ),
                         )),
-
                     onPressed: () {
                       FirebaseAuthMethods(FirebaseAuth.instance)
                           .signInWithGoogle(context);
                     },
-                    
                     child: const Text(
                       'Sign in With Google',
                       style: TextStyle(
@@ -281,7 +233,6 @@ void loginUser() async {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 25, right: 25, bottom: 10),
               child: Container(
@@ -322,7 +273,8 @@ class MyTextField extends StatelessWidget {
     required this.inputType,
     required this.labelText2,
     required this.secure1,
-    required this.capital, required this.nameController1,
+    required this.capital,
+    required this.nameController1,
   });
 
   final String hintText;
@@ -330,7 +282,7 @@ class MyTextField extends StatelessWidget {
   final String labelText2;
   final bool secure1;
   final TextCapitalization capital;
-  final TextEditingController nameController1 ;
+  final TextEditingController nameController1;
 
   @override
   Widget build(BuildContext context) {

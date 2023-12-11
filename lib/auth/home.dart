@@ -10,7 +10,6 @@ class HomeScreenPage extends StatelessWidget {
             child: SingleChildScrollView(
                 reverse: true,
                 child: Column(children: [
-
                   /*
 
 
