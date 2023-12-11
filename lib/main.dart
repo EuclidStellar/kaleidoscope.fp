@@ -1,23 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:kaleidoscope_fp/auth/welcome.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+
+// FIrebase Implmentation is going to start from this commit 
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
+  runApp(const Login());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
+class Login extends StatelessWidget {
+  const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Login',
+      
       theme: ThemeData(
         
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
         useMaterial3: true,
+        textTheme: GoogleFonts.latoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+
       ),
-      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
+      home: const Welcome(),
+
     );
-  }
+    
+}
 }

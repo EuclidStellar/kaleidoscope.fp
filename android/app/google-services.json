@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "549680451365",
+    "project_id": "footprints-app-c3790",
+    "storage_bucket": "footprints-app-c3790.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549680451365:android:53c41131d9eda9810814cc",
+        "android_client_info": {
+          "package_name": "com.example.kaleidoscope_fp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADgIaXmYoMNmyo3qZhwF6D8uT1DS0suNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
