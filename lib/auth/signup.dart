@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaleidoscope_fp/auth/auth.dart';
 import 'package:kaleidoscope_fp/auth/login.dart';
-import 'package:kaleidoscope_fp/auth/otp.dart';
+
 import 'package:kaleidoscope_fp/utils/snackbar.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,6 +16,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 //   // bool isValidEmail(String email) {
@@ -42,6 +43,14 @@ class _SignUpState extends State<SignUp> {
     return passwordPattern.hasMatch(password);
   }
 
+  bool isValidPhone(String phone) {
+    final RegExp phonePattern = RegExp(
+      r'^[0-9]{10}$',
+    );
+
+    return phonePattern.hasMatch(phone);
+  }
+
   Future<bool> signUpUser() async {
     String email = emailController.text;
     String password = passwordController.text;
@@ -54,6 +63,11 @@ class _SignUpState extends State<SignUp> {
     if (!isValidPassword(password)) {
       showSnackBar(context,
           'Invalid password format (must contain 1 uppercase, 1 special character and must be at least 8 characters long)');
+      return false;
+    }
+
+    if (!isValidPhone(phoneController.text)) {
+      showSnackBar(context, 'Invalid phone number');
       return false;
     }
 
@@ -146,6 +160,25 @@ class _SignUpState extends State<SignUp> {
             const SizedBox(
               height: 8,
             ),
+             MySignUpTextField(
+              hintText: 'Enter your Phone Number',
+              inputType: TextInputType.phone,
+              labelText2: 'Phone Number',
+              secure1: false,
+              nameController: phoneController,
+              capital: TextCapitalization.none,
+              validator1: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your Phone Number';
+                } else if (value.length < 6) {
+                  return 'Please enter a valid Phone Number';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             MySignUpTextField(
               hintText: 'Enter your Email',
               inputType: TextInputType.emailAddress,
@@ -184,39 +217,7 @@ class _SignUpState extends State<SignUp> {
             const SizedBox(
               height: 8,
             ),
-            GestureDetector(
-              onTap: () {
-                /*
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ForgotPassword(),
-                  ),
-                );
-
-                */
-
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => OTPScreen()));
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 25.0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'Send OTP',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 95, 95, 95),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+           
             Padding(
               padding: const EdgeInsets.all(20),
               child: Container(
@@ -235,16 +236,7 @@ class _SignUpState extends State<SignUp> {
                           onTap: () async {
                             bool signUpSuccessful = await signUpUser();
                             if (signUpSuccessful) {
-                              /*
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(title: 'Sign Up',),
-                                ),
-                              );
-
-                              */
+                             
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
