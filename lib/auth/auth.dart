@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kaleidoscope_fp/auth/home.dart';
 import 'package:kaleidoscope_fp/utils/snackbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth _auth;
   FirebaseAuthMethods(this._auth);
+
+  // Starting error handling if any !
 
 // Email Sign up
 
@@ -44,8 +47,6 @@ class FirebaseAuthMethods {
     }
   }
 
-// Email Login
-
   Future<void> emailLogin({
     required String email,
     required String password,
@@ -57,17 +58,6 @@ class FirebaseAuthMethods {
         password: password,
       );
 
-      /*
-     
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login successful'),
-         
-        ),
-      );
-
-      */
-
       if (_auth.currentUser!.emailVerified) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -75,33 +65,22 @@ class FirebaseAuthMethods {
           ),
         );
 
-        /*
-
-
-         Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreenPage(
-            title: 'homescreen',
-          ),
-        ),
-      );
-
-
-      */
+        await saveUserLoginStatus(true);
 
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreenPage(
-                      title: 'Homepage',
-                    )));
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const HomeScreenPage(title: 'Homepage'),
+          ),
+        );
       } else {
         showSnackBar(context, 'Please verify your email');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-                'A link is sent to your email. Please verify your email address to continue'),
+              'A link is sent to your email. Please verify your email address to continue',
+            ),
             duration: Duration(seconds: 5),
           ),
         );
@@ -132,19 +111,6 @@ class FirebaseAuthMethods {
     }
   }
 
-// Email Verification
-
-  Future<void> sendEmailverifcation(BuildContext context) async {
-    try {
-      await _auth.currentUser!.sendEmailVerification();
-      showSnackBar(context, 'Verification Email has been sent');
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message!);
-    }
-  }
-
-// Googele Sign in
-
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
@@ -166,22 +132,22 @@ class FirebaseAuthMethods {
           await sendEmailverifcation(context);
           showSnackBar(context, 'Please verify your email');
         } else {
+          await saveUserLoginStatus(true);
+
           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreenPage(
-                        title: 'Homepage',
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  HomeScreenPage(title: 'Homepage'),
+            ),
+          );
         }
       } else {
-        // Handle the case where userCredential.user is null
         showSnackBar(context, 'Authentication failed. Please try again.');
       }
     } on FirebaseAuthException catch (e) {
-      // Handle FirebaseAuthException errors
       showSnackBar(context, e.message!);
     } catch (e) {
-      // Handle other errors
       showSnackBar(context, 'Authentication failed. Please try again.');
     }
   }
@@ -206,6 +172,28 @@ class FirebaseAuthMethods {
 //   FirebaseAuth.instance
 //   .authStateChanges();
 // }
+
+  Future<void> saveUserLoginStatus(bool isLoggedIn) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', isLoggedIn);
+  }
+
+  Future<bool> getUserLoginStatus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn');
+    return isLoggedIn ?? false;
+  }
+
+// Email Verification
+
+  Future<void> sendEmailverifcation(BuildContext context) async {
+    try {
+      await _auth.currentUser!.sendEmailVerification();
+      showSnackBar(context, 'Verification Email has been sent');
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message!);
+    }
+  }
 }
 
 // Google Sign In raw code
@@ -257,3 +245,128 @@ class FirebaseAuthMethods {
 //       showSnackBar(context, e.message!);
 //     }
 //   }
+
+// // Email Login
+
+// Future<void> emailLogin({
+//     required String email,
+//     required String password,
+//     required BuildContext context,
+//   }) async {
+//      try {
+//       await _auth.signInWithEmailAndPassword(
+//         email: email,
+//         password: password,
+//       );
+
+//       /*
+
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(
+//           content: Text('Login successful'),
+
+//         ),
+//       );
+
+//       */
+
+//       if (_auth.currentUser!.emailVerified) {
+
+//          ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(
+//           content: Text('Login successful'),
+
+//         ),
+//       );
+
+//       /*
+
+//          Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => const HomeScreenPage(
+//             title: 'homescreen',
+//           ),
+//         ),
+//       );
+
+//       */
+
+//       Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => HomeScreenPage(title: 'Homepage',)));
+
+//       } else {
+
+//        showSnackBar(context, 'Please verify your email');
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           const SnackBar(
+//             content: Text(
+//                 'A link is sent to your email. Please verify your email address to continue'),
+//             duration: Duration(seconds: 5),
+//           ),
+//         );
+//       }
+//   } on FirebaseAuthException catch (e) {
+//     if (e.code == 'user-not-found') {
+//       showSnackBar(context, 'No user found for that email.');
+//     } else if (e.code == 'wrong-password') {
+//       showSnackBar(context, 'Wrong password provided for that user.');
+//     } else if (e.code == 'invalid-email') {
+//      showSnackBar(context, 'Email is Invalid ');
+//     } else if (e.code == 'user-disabled') {
+//       showSnackBar(context, 'Account deleted');
+//     } else if (e.code == 'too-many-requests') {
+//      showSnackBar(context, 'Too many requests. Try again later.');
+//     } else if (e.code == 'operation-not-allowed') {
+//      showSnackBar(context, 'Signing in with Email and Password is not enabled.');
+//     } else if (e.code == 'network-request-failed') {
+//       showSnackBar(context, 'Please check your internet connection');
+//     } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+//      showSnackBar(context, 'Invalid login credentials');
+//     } else {
+//      showSnackBar(context, e.code);
+//     }
+//   } catch (e) {
+//    showSnackBar(context, e.toString());
+
+//   }
+
+// }
+
+// // Googele Sign in
+
+// Future<void> signInWithGoogle(BuildContext context) async {
+//   try {
+//     final GoogleSignInAccount? googleSignInAccount =
+//         await GoogleSignIn().signIn();
+
+//     final GoogleSignInAuthentication? googleSignInAuthentication =
+//         await googleSignInAccount?.authentication;
+
+//     final AuthCredential credential = GoogleAuthProvider.credential(
+//       accessToken: googleSignInAuthentication?.accessToken,
+//       idToken: googleSignInAuthentication?.idToken,
+//     );
+
+//     UserCredential userCredential =
+//         await FirebaseAuth.instance.signInWithCredential(credential);
+
+//     if (userCredential.user != null) {
+//       if (userCredential.additionalUserInfo!.isNewUser) {
+//         await sendEmailverifcation(context);
+//         showSnackBar(context, 'Please verify your email');
+//       } else {
+
+//          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => HomeScreenPage(title: 'Homepage',)));
+//       }
+//     } else {
+//       // Handle the case where userCredential.user is null
+//       showSnackBar(context, 'Authentication failed. Please try again.');
+//     }
+//   } on FirebaseAuthException catch (e) {
+//     // Handle FirebaseAuthException errors
+//     showSnackBar(context, e.message!);
+//   } catch (e) {
+//     // Handle other errors
+//     showSnackBar(context, 'Authentication failed. Please try again.');
+//   }
+// }

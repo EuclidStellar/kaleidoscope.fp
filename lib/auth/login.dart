@@ -89,19 +89,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
+
             const SizedBox(
               height: 20,
             ),
+
             SizedBox(
               width: double.infinity,
               child: Image.asset('assets/images/img4.png'),
             ),
+
             const SizedBox(
               height: 20,
             ),
+
             const SizedBox(
               height: 10,
             ),
+
             MyTextField(
               hintText: 'Enter your Email',
               inputType: TextInputType.emailAddress,
@@ -110,9 +115,11 @@ class _LoginScreenState extends State<LoginScreen> {
               capital: TextCapitalization.none,
               nameController1: emailController,
             ),
+
             const SizedBox(
               height: 10,
             ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
@@ -144,9 +151,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+
             const SizedBox(
               height: 5,
             ),
+
             GestureDetector(
               onTap: () {
                 /*
@@ -182,57 +191,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+
             const SizedBox(
               height: 30,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => ForgotPassword(
-                              title: 'Homepage',
-                            )));
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 25, right: 25, bottom: 12),
-                child: Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: TextButton(
-                    style: const ButtonStyle(
-                        elevation: MaterialStatePropertyAll(8),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Color.fromARGB(255, 214, 213, 213)),
-                        shadowColor: MaterialStatePropertyAll(
-                            Color.fromARGB(255, 14, 14, 14)),
-                        shape: MaterialStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(16),
-                            ),
+
+            // GestureDetector(
+            //  onTap: () {
+
+            //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ForgotPassword(title: 'Homepage',)));
+            // },
+
+            Padding(
+              padding: const EdgeInsets.only(left: 25, right: 25, bottom: 12),
+              child: Container(
+                height: 60,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      elevation: MaterialStatePropertyAll(8),
+                      backgroundColor: MaterialStatePropertyAll(
+                          Color.fromARGB(255, 214, 213, 213)),
+                      shadowColor: MaterialStatePropertyAll(
+                          Color.fromARGB(255, 14, 14, 14)),
+                      shape: MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16),
                           ),
-                        )),
-                    onPressed: () {
-                      FirebaseAuthMethods(FirebaseAuth.instance)
-                          .signInWithGoogle(context);
-                    },
-                    child: const Text(
-                      'Sign in With Google',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 81, 80, 80),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                        ),
+                      )),
+                  onPressed: () {
+                    FirebaseAuthMethods(FirebaseAuth.instance)
+                        .signInWithGoogle(context);
+                  },
+                  child: const Text(
+                    'Sign in With Google',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 81, 80, 80),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
             ),
+            // ),
+
             Padding(
               padding: const EdgeInsets.only(left: 25, right: 25, bottom: 10),
               child: Container(

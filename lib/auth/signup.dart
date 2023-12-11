@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaleidoscope_fp/auth/auth.dart';
-import 'package:kaleidoscope_fp/auth/forgot.dart';
 import 'package:kaleidoscope_fp/auth/login.dart';
-
-import '../utils/snackbar.dart';
+import 'package:kaleidoscope_fp/auth/otp.dart';
+import 'package:kaleidoscope_fp/utils/snackbar.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -19,9 +18,20 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+//   // bool isValidEmail(String email) {
+//   //   final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
+//   //   return emailPattern.hasMatch(email);
+//   // }
+
+//   bool isValidEmail(String email) {
+//   final gmailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@gmail.com$');
+//   return gmailRegex.hasMatch(email);
+// }
+
   bool isValidEmail(String email) {
-    final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
-    return emailPattern.hasMatch(email);
+    final akgecRegex = RegExp(r'^[\w-]+@akgec\.ac\.in$');
+    final gmailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@gmail.com$');
+    return akgecRegex.hasMatch(email) || gmailRegex.hasMatch(email);
   }
 
   bool isValidPassword(String password) {
@@ -126,6 +136,12 @@ class _SignUpState extends State<SignUp> {
               secure1: false,
               capital: TextCapitalization.words,
               nameController: nameController,
+              validator1: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your name';
+                }
+                return null;
+              },
             ),
             const SizedBox(
               height: 8,
@@ -184,9 +200,7 @@ class _SignUpState extends State<SignUp> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => ForgotPassword(
-                              title: 'Homepage',
-                            )));
+                        builder: (BuildContext context) => OTPScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.only(right: 25.0),
