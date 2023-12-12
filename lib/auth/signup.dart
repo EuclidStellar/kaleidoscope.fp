@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaleidoscope_fp/auth/auth.dart';
@@ -10,6 +11,7 @@ class SignUp extends StatefulWidget {
 
   @override
   State<SignUp> createState() => _SignUpState();
+  
 }
 
 class _SignUpState extends State<SignUp> {
@@ -18,6 +20,9 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
 
 
 
@@ -65,16 +70,25 @@ class _SignUpState extends State<SignUp> {
 
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseAuthMethods(FirebaseAuth.instance)
-            .signUpWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
-          context: context,
         );
+       await userCredential.user!.sendEmailVerification();
+
+        // Store user data in Firestore after successful signup
+        await _firestore.collection('users').doc(userCredential.user!.uid).set({
+      'name': nameController.text,
+      'email': emailController.text,
+      'phone': phoneController.text,
+    });
+
+        // Send email verification
+        // await sendEmailverifcation(context);
 
         return true;
       } catch (e) {
-        // ignore: use_build_context_synchronously
         showSnackBar(context, 'Sign-up failed. Please try again.');
       }
     }
@@ -246,6 +260,9 @@ class _SignUpState extends State<SignUp> {
       )),
     );
   }
+  
+ 
+
 }
 
 // MytextField Widget
@@ -345,3 +362,7 @@ class SignUpButtonXd extends StatelessWidget {
     );
   }
 }
+
+
+
+

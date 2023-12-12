@@ -1,6 +1,7 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kaleidoscope_fp/auth/home.dart';
 import 'package:kaleidoscope_fp/utils/snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,20 +33,51 @@ class FirebaseAuthMethods {
         showSnackBar(context, 'The account already exists for that email.');
       }
 
-      /*
-
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-      showSnackBar(
-          context, e.message!);
-
-          
-      */
+      
     }
   }
+
+
+  // saving user data 
+
+  //  Future<void> storeUserDataInFirestore({
+  //   required String uid,
+  //   required String name,
+  //   required String email,
+  //   required String phone,
+  // }) async {
+  //   await FirebaseFirestore.instance.collection('users').doc(uid).set({
+  //     'name': name,
+  //     'email': email,
+  //     'phone': phone,
+  //   });
+  // }
+
+  Future<void> storeUserDataInFirestore({
+  required String uid,
+  required String name,
+  required String email,
+  required String phone,
+   required BuildContext context,
+}) async {
+  try {
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'name': name,
+      'email': email,
+      'phone': phone,
+    });
+
+    // Send email verification
+    await sendEmailverifcation(context); // You need to implement this function
+
+  } catch (e) {
+    // Handle Firestore errors
+    print('Error storing user data in Firestore: $e');
+    // You can add additional error handling or show a snackbar
+    throw e; // Rethrow the exception if needed
+  }
+}
+
 
   Future<void> emailLogin({
     required String email,
@@ -111,47 +143,6 @@ class FirebaseAuthMethods {
     }
   }
 
-  Future<void> signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn().signIn();
-
-      final GoogleSignInAuthentication? googleSignInAuthentication =
-          await googleSignInAccount?.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication?.accessToken,
-        idToken: googleSignInAuthentication?.idToken,
-      );
-
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      if (userCredential.user != null) {
-        if (userCredential.additionalUserInfo!.isNewUser) {
-          await sendEmailverifcation(context);
-          showSnackBar(context, 'Please verify your email');
-        } else {
-          await saveUserLoginStatus(true);
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  HomeScreenPage(title: 'Homepage'),
-            ),
-          );
-        }
-      } else {
-        showSnackBar(context, 'Authentication failed. Please try again.');
-      }
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message!);
-    } catch (e) {
-      showSnackBar(context, 'Authentication failed. Please try again.');
-    }
-  }
-
 // Forgot Password
 
   Future<void> sendPasswordResetEmail(
@@ -166,12 +157,6 @@ class FirebaseAuthMethods {
     }
   }
 
-// Checking is user is logged in or not if logged in then only login for once
-
-// Future<void> checkUserloginonce() async {
-//   FirebaseAuth.instance
-//   .authStateChanges();
-// }
 
   Future<void> saveUserLoginStatus(bool isLoggedIn) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
