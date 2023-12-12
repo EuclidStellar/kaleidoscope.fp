@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kaleidoscope_fp/auth/home.dart';
 import 'package:kaleidoscope_fp/auth/login.dart';
+import 'package:kaleidoscope_fp/auth/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
@@ -30,9 +31,9 @@ class Login extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
-              return const HomeScreenPage(title: 'Homepage');
+              return  HomeScreenPage();
             } else {
-              return const LoginScreen(title: '',); 
+              return const Welcome(); 
             }
           } else {
             return const CircularProgressIndicator();

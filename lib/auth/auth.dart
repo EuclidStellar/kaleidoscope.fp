@@ -103,7 +103,7 @@ class FirebaseAuthMethods {
           context,
           MaterialPageRoute(
             builder: (BuildContext context) =>
-                const HomeScreenPage(title: 'Homepage'),
+               HomeScreenPage(),
           ),
         );
       } else {

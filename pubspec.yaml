@@ -43,6 +43,8 @@ dependencies:
   shared_preferences: ^2.2.2
   pin_input_text_field: ^4.5.1
   cloud_firestore: ^4.13.5
+  cached_network_image: ^3.3.0
+  cached_network_svg_image: ^0.0.7
 
 dev_dependencies:
   flutter_test:
