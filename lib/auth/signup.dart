@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kaleidoscope_fp/auth/auth.dart';
 import 'package:kaleidoscope_fp/auth/login.dart';
 
 import 'package:kaleidoscope_fp/utils/snackbar.dart';
@@ -11,7 +10,6 @@ class SignUp extends StatefulWidget {
 
   @override
   State<SignUp> createState() => _SignUpState();
-  
 }
 
 class _SignUpState extends State<SignUp> {
@@ -20,11 +18,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
-
-
 
   bool isValidEmail(String email) {
     final akgecRegex = RegExp(r'^[\w-]+@akgec\.ac\.in$');
@@ -75,20 +69,17 @@ class _SignUpState extends State<SignUp> {
           email: email,
           password: password,
         );
-       await userCredential.user!.sendEmailVerification();
+        await userCredential.user!.sendEmailVerification();
 
-        // Store user data in Firestore after successful signup
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
-      'name': nameController.text,
-      'email': emailController.text,
-      'phone': phoneController.text,
-    });
-
-        // Send email verification
-        // await sendEmailverifcation(context);
+          'name': nameController.text,
+          'email': emailController.text,
+          'phone': phoneController.text,
+        });
 
         return true;
       } catch (e) {
+        // ignore: use_build_context_synchronously
         showSnackBar(context, 'Sign-up failed. Please try again.');
       }
     }
@@ -160,7 +151,7 @@ class _SignUpState extends State<SignUp> {
             const SizedBox(
               height: 8,
             ),
-             MySignUpTextField(
+            MySignUpTextField(
               hintText: 'Enter your Phone Number',
               inputType: TextInputType.phone,
               labelText2: 'Phone Number',
@@ -217,7 +208,6 @@ class _SignUpState extends State<SignUp> {
             const SizedBox(
               height: 8,
             ),
-           
             Padding(
               padding: const EdgeInsets.all(20),
               child: Container(
@@ -236,12 +226,12 @@ class _SignUpState extends State<SignUp> {
                           onTap: () async {
                             bool signUpSuccessful = await signUpUser();
                             if (signUpSuccessful) {
-                             
+                              // ignore: use_build_context_synchronously
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          LoginScreen(
+                                          const LoginScreen(
                                             title: 'Sign Up',
                                           )));
                             }
@@ -260,9 +250,6 @@ class _SignUpState extends State<SignUp> {
       )),
     );
   }
-  
- 
-
 }
 
 // MytextField Widget
@@ -362,7 +349,3 @@ class SignUpButtonXd extends StatelessWidget {
     );
   }
 }
-
-
-
-
