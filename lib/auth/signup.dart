@@ -19,15 +19,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-//   // bool isValidEmail(String email) {
-//   //   final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
-//   //   return emailPattern.hasMatch(email);
-//   // }
 
-//   bool isValidEmail(String email) {
-//   final gmailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@gmail.com$');
-//   return gmailRegex.hasMatch(email);
-// }
 
   bool isValidEmail(String email) {
     final akgecRegex = RegExp(r'^[\w-]+@akgec\.ac\.in$');
@@ -134,14 +126,8 @@ class _SignUpState extends State<SignUp> {
                 ),
               ],
             ),
-            SizedBox(
-              width: double.infinity,
-              child: Image.asset(
-                'assets/images/img7.png',
-
-                fit: BoxFit.scaleDown,
-                //width: 300,
-              ),
+            const SizedBox(
+              height: 20,
             ),
             MySignUpTextField(
               hintText: 'Enter your Name',

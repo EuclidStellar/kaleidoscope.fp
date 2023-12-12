@@ -172,4 +172,4 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 }
 
-void main() => runApp(MaterialApp(home: OTPScreen()));
+

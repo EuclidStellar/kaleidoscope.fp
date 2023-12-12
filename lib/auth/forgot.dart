@@ -20,11 +20,28 @@ class ForgotPassword extends StatelessWidget {
         return;
       }
 
+      // Validate email format using regex
+      final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
+      if (!emailPattern.hasMatch(email)) {
+        showSnackBar(context, 'Please enter a valid AKGEC email address.');
+        return;
+      }
+
       try {
         await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
         // Display a confirmation message
         showSnackBar(
             context, 'Password reset email sent. Please check your inbox.');
+
+        // Navigate to the login screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(
+              title: 'Logincreen',
+            ),
+          ),
+        );
       } catch (e) {
         // Handle errors (e.g., invalid email, user not found)
         showSnackBar(context, 'Password reset failed. Please try again.');
@@ -107,17 +124,7 @@ class ForgotPassword extends StatelessWidget {
                       Expanded(
                         child: Login(
                           buttonName: 'Reset Password',
-                          onTap: () {
-                            resetPassword();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(
-                                  title: 'Logincreen',
-                                ),
-                              ),
-                            );
-                          },
+                          onTap: resetPassword,
                           bgColor: Colors.black,
                           textColor: Colors.white,
                         ),
@@ -133,5 +140,3 @@ class ForgotPassword extends StatelessWidget {
     );
   }
 }
-
-

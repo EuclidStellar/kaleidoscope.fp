@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? emailError;
   String? passwordError;
+  bool ispasswordVisible = false;
 
   bool isValidEmail(String email) {
     final RegExp emailPattern = RegExp(r'^[\w-]+@akgec\.ac\.in$');
@@ -124,14 +125,20 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: !ispasswordVisible,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.remove_red_eye_rounded,
+                    onPressed: () {
+                      setState(() {
+                        ispasswordVisible = !ispasswordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      ispasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       color: Colors.grey,
                     ),
                   ),
@@ -187,51 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
 
-            // GestureDetector(
-            //  onTap: () {
-
-            //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ForgotPassword(title: 'Homepage',)));
-            // },
-
-            Padding(
-              padding: const EdgeInsets.only(left: 25, right: 25, bottom: 12),
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: TextButton(
-                  style: const ButtonStyle(
-                      elevation: MaterialStatePropertyAll(8),
-                      backgroundColor: MaterialStatePropertyAll(
-                          Color.fromARGB(255, 214, 213, 213)),
-                      shadowColor: MaterialStatePropertyAll(
-                          Color.fromARGB(255, 14, 14, 14)),
-                      shape: MaterialStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(16),
-                          ),
-                        ),
-                      )),
-                  onPressed: () {
-                    FirebaseAuthMethods(FirebaseAuth.instance)
-                        .signInWithGoogle(context);
-                  },
-                  child: const Text(
-                    'Sign in With Google',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 81, 80, 80),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // ),
+            
 
             Padding(
               padding: const EdgeInsets.only(left: 25, right: 25, bottom: 10),
