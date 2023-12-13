@@ -47,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               labelText2: 'Name',
               secure1: false,
               nameController: _nameController,
-              capital: TextCapitalization.characters,
+              capital: TextCapitalization.words,
             ),
 
             SizedBox(height: 8),
@@ -66,7 +66,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               labelText2: 'Section',
               secure1: false,
               nameController: _sectionController,
-              capital: TextCapitalization.words,
+              capital: TextCapitalization.characters,
             ),
             SizedBox(height: 8),
             MySignUpTextField(
@@ -75,16 +75,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               labelText2: 'Branch',
               secure1: false,
               nameController: _branchController,
-              capital: TextCapitalization.characters,
+              capital: TextCapitalization.words,
             ),
             SizedBox(height: 8),
             MySignUpTextField(
               hintText: 'Year',
-              inputType: TextInputType.name,
+              inputType: TextInputType.phone,
               labelText2: 'Year',
               secure1: false,
               nameController: _yearController,
-              capital: TextCapitalization.characters,
+              capital: TextCapitalization.none,
             ),
             SizedBox(height: 8),
             MySignUpTextField(
