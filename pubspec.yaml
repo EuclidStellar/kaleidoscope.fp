@@ -45,6 +45,8 @@ dependencies:
   cloud_firestore: ^4.13.5
   cached_network_image: ^3.3.0
   cached_network_svg_image: ^0.0.7
+  action_slider: ^0.7.0
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
