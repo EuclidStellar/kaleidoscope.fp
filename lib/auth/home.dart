@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaleidoscope_fp/screens/artworks.dart';
 import 'package:kaleidoscope_fp/screens/events.dart';
 import 'package:kaleidoscope_fp/screens/member.dart';
 
@@ -70,11 +71,4 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   }
 }
 
-class ArtWorksTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Art Works Content'),
-    );
-  }
-}
+
