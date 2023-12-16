@@ -30,7 +30,7 @@ class ArtWorksTab extends StatelessWidget {
                   _buildGridItem(
                     context,
                     'Literary',
-                       Literay(),
+                       Literary(),
                     Icons.book_outlined,
                     Colors.blue,
                   ),
