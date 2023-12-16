@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kaleidoscope_fp/drawer/piquestions.dart';
+import 'package:kaleidoscope_fp/drawer/uploadartwork.dart';
 import 'package:kaleidoscope_fp/screens/artworks.dart';
 import 'package:kaleidoscope_fp/screens/events.dart';
 import 'package:kaleidoscope_fp/screens/member.dart';
@@ -27,16 +29,22 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
         child: ListView(
           children: [
             ListTile(
-              title: const Text('Home'),
+              title: const Text('Upload Artwork'),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ImageUploadScreen()),
+          ); // Close the drawer
                 // Navigate to the home page if needed
               },
             ),
             ListTile(
-              title: const Text('Settings'),
+              title: const Text('Secrets ? '),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
+                  Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SecretScreen()),
+          ); // Close the drawer
                 // Navigate to the settings page or perform other actions
               },
             ),
