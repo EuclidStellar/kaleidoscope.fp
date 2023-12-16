@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaleidoscope_fp/auth/notification.dart';
 import 'package:kaleidoscope_fp/drawer/piquestions.dart';
 import 'package:kaleidoscope_fp/drawer/uploadartwork.dart';
 import 'package:kaleidoscope_fp/screens/artworks.dart';
@@ -23,7 +24,21 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      
         title: const Text('Kaleidoscope'),
+       
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notification_add),
+            onPressed: () {
+              Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NotificationScreen()),
+          ); // Close the drawer
+            },
+          ),
+          
+        ],
       ),
       drawer: Drawer(
         child: ListView(
