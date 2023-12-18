@@ -1,47 +1,4 @@
-// import 'package:flutter/material.dart';
-// import 'package:kaleidoscope_fp/screens/registration.dart';
 
-// import '../model/eventsmodel.dart';
-
-// class EventsTab extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Events'),
-//       ),
-//       body: ListView.builder(
-//         itemCount: events.length,
-//         itemBuilder: (context, index) {
-//           final event = events[index];
-//           return ListTile(
-//             leading: Image.network(
-//               event.imageURL,
-//               width: 50, // Adjust the width as needed
-//               height: 50, // Adjust the height as needed
-//               fit: BoxFit.cover,
-//             ),
-//             title: Text(event.name),
-//             subtitle: Text(event.description),
-//             trailing: event.isUpcoming
-//                 ? ElevatedButton(
-//                     onPressed: () {
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                           builder: (context) => RegistrationScreen(),
-//                         ),
-//                       );
-//                     },
-//                     child: Text('Register'),
-//                   )
-//                 : null,
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
 
 
 import 'package:flutter/material.dart';
@@ -54,6 +11,7 @@ class EventsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Events'),
       ),
       body: ListView.builder(
@@ -130,3 +88,49 @@ class EventsTab extends StatelessWidget {
     );
   }
 }
+
+
+// import 'package:flutter/material.dart';
+// import 'package:kaleidoscope_fp/screens/registration.dart';
+
+// import '../model/eventsmodel.dart';
+
+// class EventsTab extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Events'),
+//       ),
+//       body: ListView.builder(
+//         itemCount: events.length,
+//         itemBuilder: (context, index) {
+//           final event = events[index];
+//           return ListTile(
+//             leading: Image.network(
+//               event.imageURL,
+//               width: 50, // Adjust the width as needed
+//               height: 50, // Adjust the height as needed
+//               fit: BoxFit.cover,
+//             ),
+//             title: Text(event.name),
+//             subtitle: Text(event.description),
+//             trailing: event.isUpcoming
+//                 ? ElevatedButton(
+//                     onPressed: () {
+//                       Navigator.push(
+//                         context,
+//                         MaterialPageRoute(
+//                           builder: (context) => RegistrationScreen(),
+//                         ),
+//                       );
+//                     },
+//                     child: Text('Register'),
+//                   )
+//                 : null,
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

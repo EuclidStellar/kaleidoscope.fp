@@ -11,7 +11,7 @@ class Photography extends StatelessWidget {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('photography')
+            .collection('photodd')
             .orderBy('timestamp', descending: true) // Sort by timestamp in descending order
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
