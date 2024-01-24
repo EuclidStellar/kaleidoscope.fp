@@ -1,19 +1,24 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: NotificationScreen(),
+  ));
+}
 
 class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('notification').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -25,7 +30,7 @@ class NotificationScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No notifications available.'),
             );
           }
@@ -54,7 +59,6 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 }
-
 class NotificationCard extends StatelessWidget {
   final NotificationMessage notification;
 
@@ -64,31 +68,47 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 8,
-      margin: EdgeInsets.all(12),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'From: ${notification.name}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+      margin: const EdgeInsets.all(12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade200, Colors.blue.shade400],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'From: ${notification.name}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Message: ${notification.message}',
-              style: TextStyle(
-                fontSize: 14,
+              const SizedBox(height: 12),
+              Text(
+                'Message: ${notification.message}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+ 
 }
 
 class NotificationMessage {
@@ -99,10 +119,4 @@ class NotificationMessage {
     required this.name,
     required this.message,
   });
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: NotificationScreen(),
-  ));
 }
