@@ -56,31 +56,34 @@ class MembersTab extends StatelessWidget {
     members.sort((a, b) => b.year.compareTo(a.year));
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: (members.length / 2).ceil(),
-        itemBuilder: (context, index) {
-          final int firstIndex = index * 2;
-          final int secondIndex = index * 2 + 1;
-
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: MemberCard(member: members[firstIndex]),
-                ),
-                const SizedBox(width: 8), // Add spacing between cards
-                Expanded(
-                  child: secondIndex < members.length
-                      ? MemberCard(member: members[secondIndex])
-                      : const SizedBox
-                          .shrink(), // Hide if there is no second member
-                ),
-              ],
-            ),
-          );
-        },
+      body: Padding(
+        padding: const EdgeInsets.only(top: 4.0 , bottom: 16.0 , left: 8.0 , right: 8.0),
+        child: ListView.builder(
+          itemCount: (members.length / 2).ceil(),
+          itemBuilder: (context, index) {
+            final int firstIndex = index * 2;
+            final int secondIndex = index * 2 + 1;
+        
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: MemberCard(member: members[firstIndex]),
+                  ),
+                  const SizedBox(width: 8), // Add spacing between cards
+                  Expanded(
+                    child: secondIndex < members.length
+                        ? MemberCard(member: members[secondIndex])
+                        : const SizedBox
+                            .shrink(), // Hide if there is no second member
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
