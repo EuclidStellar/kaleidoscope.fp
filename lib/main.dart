@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //import 'package:trainee_login/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kaleidoscope_fp/auth/home.dart';
 import 'package:kaleidoscope_fp/auth/login.dart';
 import 'package:kaleidoscope_fp/auth/welcome.dart';
@@ -25,6 +26,15 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      return  MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        textTheme: GoogleFonts.latoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       debugShowCheckedModeBanner: false,
       home: FutureBuilder<bool>(
         future: getUserLoginStatus(),

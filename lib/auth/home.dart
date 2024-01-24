@@ -24,7 +24,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      
+      centerTitle: true,
         title: const Text('Kaleidoscope'),
        
         actions: [
