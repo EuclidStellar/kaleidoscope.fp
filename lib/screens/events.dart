@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:kaleidoscope_fp/screens/registration.dart';
 
@@ -10,10 +7,6 @@ class EventsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text('Events'),
-      ),
       body: ListView.builder(
         itemCount: events.length,
         itemBuilder: (context, index) {
@@ -25,8 +18,8 @@ class EventsTab extends StatelessWidget {
             child: ListTile(
               leading: Image.network(
                 event.imageURL,
-                width: 50, // Adjust the width as needed
-                height: 50, // Adjust the height as needed
+                width: 50,
+                height: 50,
                 fit: BoxFit.cover,
               ),
               title: Text(event.name),
@@ -41,7 +34,25 @@ class EventsTab extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text('Register'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                            255, 33, 163, 243), // Set your desired button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Adjust border radius
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          'Register',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white, // Set your desired text color
+                          ),
+                        ),
+                      ),
                     )
                   : null,
             ),
@@ -56,6 +67,7 @@ class EventsTab extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
