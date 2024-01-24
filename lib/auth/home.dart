@@ -41,16 +41,31 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
         ],
       ),
       drawer: Drawer(
+        backgroundColor: Colors.white,
+
         child: ListView(
           children: [
+           const SizedBox(
+              height: 30,
+            ),
+            const  Text(
+              'Kaleidoscope',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.black,
+              )
+            ),
+             const SizedBox(
+              height: 30,
+            ),
             ListTile(
               title: const Text('Upload Artwork'),
               onTap: () {
                 Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ImageUploadScreen()),
-          ); // Close the drawer
-                // Navigate to the home page if needed
+          ); 
               },
             ),
             ListTile(
