@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kaleidoscope_fp/screens/photography.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class Design extends StatelessWidget {
+class Design extends StatefulWidget {
+  @override
+  _DesignState createState() => _DesignState();
+}
+
+class _DesignState extends State<Design> {
+  bool _isGridMode = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Design'),
+        actions: [
+          IconButton(
+            icon: Icon(_isGridMode ? Icons.list : Icons.grid_view),
+            onPressed: () {
+              setState(() {
+                _isGridMode = !_isGridMode;
+              });
+            },
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -43,148 +61,144 @@ class Design extends StatelessWidget {
             );
           }).toList();
 
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-            ),
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  _showImageDetailsDialog(context, images[index]);
-                },
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Image.network(
-                    images[index].imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            },
-          );
+          return _isGridMode
+              ? _buildGridView(images)
+              : _buildListView(images);
         },
       ),
     );
   }
 
-  void _showImageDetailsDialog(BuildContext context, ImageData imageData) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-                child: Image.network(
-                  imageData.imageUrl,
-                  fit: BoxFit.cover,
-                ),
+  Widget _buildGridView(List<ImageData> images) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
+      ),
+      itemCount: images.length,
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ImageDetailsPage(imageData: images[index]),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      imageData.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    SizedBox(
-                      height: 100.0, // Adjust the height as needed
-                      child: SingleChildScrollView(
-                        child: Text(
-                          imageData.description,
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _showFullScreenImage(context, imageData.imageUrl);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 149, 149, 150),
-                        ),
-                        child: const Text(
-                          'Show Image',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            );
+          },
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: Image.network(
+              images[index].imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         );
       },
     );
   }
 
-  void _showFullScreenImage(BuildContext context, String imageUrl) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FullScreenImagePage(imageUrl: imageUrl),
-      ),
+  Widget _buildListView(List<ImageData> images) {
+    return ListView.builder(
+      itemCount: images.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImageDetailsPage(imageData: images[index]),
+                ),
+              );
+            },
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        images[index].imageUrl,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          images[index].name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          images[index].description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
 
-class FullScreenImagePage extends StatelessWidget {
-  final String imageUrl;
+class ImageDetailsPage extends StatelessWidget {
+  final ImageData imageData;
 
-  const FullScreenImagePage({Key? key, required this.imageUrl}) : super(key: key);
+  const ImageDetailsPage({Key? key, required this.imageData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Center(
-          child: PhotoView(
-            imageProvider: NetworkImage(imageUrl),
-            loadingBuilder: (context, event) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
+      appBar: AppBar(
+        title: Text("Crafted by ${imageData.name}"),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              imageData.imageUrl,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              imageData.description,
+              style: TextStyle(fontSize: 16.0),
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Author: ${imageData.name}',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
         ),
       ),
     );
   }
-}
-
-class ImageData {
-  final String name;
-  final String description;
-  final String imageUrl;
-
-  ImageData({
-    required this.name,
-    required this.description,
-    required this.imageUrl,
-  });
 }

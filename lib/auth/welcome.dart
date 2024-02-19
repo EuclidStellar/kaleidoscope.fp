@@ -11,7 +11,7 @@ class Welcome extends StatelessWidget {
         body: SafeArea(
             child: Padding(
       padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
+       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

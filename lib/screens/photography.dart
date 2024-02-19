@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 
-class Photography extends StatelessWidget {
+class Photography extends StatefulWidget {
+  @override
+  _PhotographyState createState() => _PhotographyState();
+}
+
+class _PhotographyState extends State<Photography> {
+  bool _isGridMode = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Photography'),
+        actions: [
+          IconButton(
+            icon: Icon(_isGridMode ? Icons.list : Icons.grid_view),
+            onPressed: () {
+              setState(() {
+                _isGridMode = !_isGridMode;
+              });
+            },
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -43,134 +59,146 @@ class Photography extends StatelessWidget {
             );
           }).toList();
 
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-            ),
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  _showImageDetailsDialog(context, images[index]);
-                },
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Image.network(
-                    images[index].imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            },
-          );
+          return _isGridMode
+              ? _buildGridView(images)
+              : _buildListView(images);
         },
       ),
     );
   }
 
-  void _showImageDetailsDialog(BuildContext context, ImageData imageData) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-                child: Image.network(
-                  imageData.imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      imageData.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    SizedBox(
-                      height: 100.0, // Adjust the height as needed
-                      child: SingleChildScrollView(
-                        child: Text(
-                          imageData.description,
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _showFullScreenImage(context, imageData.imageUrl);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 149, 149, 150),
-                        ),
-                        child: const Text(
-                          'Show Image',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+  Widget _buildGridView(List<ImageData> images) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
+      ),
+      itemCount: images.length,
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () {
+            _showImageDetailsDialog(context, images[index]);
+          },
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: Image.network(
+              images[index].imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         );
       },
     );
   }
+Widget _buildListView(List<ImageData> images) {
+  return ListView.builder(
+    itemCount: images.length,
+    itemBuilder: (context, index) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Card(
+          elevation: 4.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: InkWell(
+            onTap: () {
+              _showImageDetailsDialog(context, images[index]);
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.network(
+                    images[index].imageUrl,
+                    fit: BoxFit.cover,
+                    width: 100.0,
+                    height: 100.0,
+                  ),
+                ),
+                SizedBox(width: 12.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        images[index].name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        images[index].description,
+                        style: TextStyle(fontSize: 16.0),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'Photographer: ${images[index].name}',
+                        style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
 
-  void _showFullScreenImage(BuildContext context, String imageUrl) {
+
+  void _showImageDetailsDialog(BuildContext context, ImageData imageData) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FullScreenImagePage(imageUrl: imageUrl),
+        builder: (context) => ImageDetailsPage(imageData: imageData),
       ),
     );
   }
 }
 
-class FullScreenImagePage extends StatelessWidget {
-  final String imageUrl;
+class ImageDetailsPage extends StatelessWidget {
+  final ImageData imageData;
 
-  const FullScreenImagePage({Key? key, required this.imageUrl}) : super(key: key);
+  const ImageDetailsPage({Key? key, required this.imageData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Center(
-          child: PhotoView(
-            imageProvider: NetworkImage(imageUrl),
-            loadingBuilder: (context, event) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
+      appBar: AppBar(
+        title: Text("Captured by ${imageData.name}"),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              imageData.imageUrl,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              imageData.description,
+              style: TextStyle(fontSize: 16.0),
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Photographer: ${imageData.name}',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
         ),
       ),
     );
